@@ -16,7 +16,7 @@ SUMMARY_CHAT_ID = os.environ.get("SUMMARY_CHAT_ID", "YOUR_SUMMARY_CHAT_ID_HERE")
 ALERT_BOT_TOKEN = os.environ.get("ALERT_BOT_TOKEN", "YOUR_ALERT_BOT_TOKEN_HERE")
 ALERT_CHAT_ID = os.environ.get("ALERT_CHAT_ID", "YOUR_ALERT_CHAT_ID_HERE")
 # Add the keywords you want to search for (in lowercase)
-ALERT_KEYWORDS = ["marseille", "luminy", "madagascar"]
+ALERT_KEYWORDS = ["marseille", "luminy", "madagascar", "grenoble"]
 
 async def send_instant_alert(message):
     """Sends the consolidated alert message to the alert bot."""
