@@ -1,18 +1,15 @@
-import json
-import time
-import requests
-import asyncio
 import os
-import re
+import time
+import json
+import re  # <--- THIS LINE WAS ADDED
+import asyncio
+import requests
 import telegram
 from telegram.error import TelegramError
 
 # --- Configuration ---
 API_SEARCH_URL = "https://trouverunlogement.lescrous.fr/api/fr/search/41"
-# You can disable the summary bot by leaving its credentials as placeholders
-SUMMARY_BOT_TOKEN = os.environ.get("SUMMARY_BOT_TOKEN", "YOUR_SUMMARY_BOT_TOKEN_HERE")
-SUMMARY_CHAT_ID = os.environ.get("SUMMARY_CHAT_ID", "YOUR_SUMMARY_CHAT_ID_HERE")
-# Fill in the credentials for your alert bot
+# Credentials for your alert bot
 ALERT_BOT_TOKEN = os.environ.get("ALERT_BOT_TOKEN", "YOUR_ALERT_BOT_TOKEN_HERE")
 ALERT_CHAT_ID = os.environ.get("ALERT_CHAT_ID", "YOUR_ALERT_CHAT_ID_HERE")
 # Add the keywords you want to search for (in lowercase)
@@ -25,7 +22,6 @@ async def send_instant_alert(message):
         return
     try:
         bot = telegram.Bot(token=ALERT_BOT_TOKEN)
-        # Handle potentially long messages by splitting them
         if len(message) > 4096:
             for part in [message[i:i+4096] for i in range(0, len(message), 4096)]:
                 await bot.send_message(chat_id=ALERT_CHAT_ID, text=part, parse_mode='HTML')
@@ -102,6 +98,8 @@ async def main():
         
         final_alert_message = "".join(message_parts)
         await send_instant_alert(final_alert_message)
+    else:
+        print("No keyword matches found during this run.")
 
 if __name__ == "__main__":
     asyncio.run(main())
