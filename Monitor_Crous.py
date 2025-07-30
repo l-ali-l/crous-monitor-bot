@@ -1,7 +1,7 @@
 import os
 import time
 import json
-import re  # <--- THIS LINE WAS ADDED
+import re
 import asyncio
 import requests
 import telegram
@@ -9,25 +9,31 @@ from telegram.error import TelegramError
 
 # --- Configuration ---
 API_SEARCH_URL = "https://trouverunlogement.lescrous.fr/api/fr/search/41"
-# Credentials for your alert bot
-ALERT_BOT_TOKEN = os.environ.get("ALERT_BOT_TOKEN", "YOUR_ALERT_BOT_TOKEN_HERE")
-ALERT_CHAT_ID = os.environ.get("ALERT_CHAT_ID", "YOUR_ALERT_CHAT_ID_HERE")
+
+# --- MODIFIED: Using the original secret names ---
+# These will now match the secrets you already have in your GitHub repository settings.
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+
 # Add the keywords you want to search for (in lowercase)
 ALERT_KEYWORDS = ["marseille", "luminy", "madagascar", "grenoble"]
 
 async def send_instant_alert(message):
-    """Sends the consolidated alert message to the alert bot."""
-    if ALERT_BOT_TOKEN == "YOUR_ALERT_BOT_TOKEN_HERE" or ALERT_CHAT_ID == "YOUR_ALERT_CHAT_ID_HERE":
-        print("Alert bot credentials not set. Cannot send alert.")
+    """Sends the consolidated alert message to the bot."""
+    # --- MODIFIED: Check for the original secret names ---
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        print("Telegram credentials not set in repository secrets. Cannot send alert.")
         return
     try:
-        bot = telegram.Bot(token=ALERT_BOT_TOKEN)
+        # --- MODIFIED: Use the original secret names ---
+        bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+        
         if len(message) > 4096:
             for part in [message[i:i+4096] for i in range(0, len(message), 4096)]:
-                await bot.send_message(chat_id=ALERT_CHAT_ID, text=part, parse_mode='HTML')
+                await bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=part, parse_mode='HTML')
                 await asyncio.sleep(0.5)
         else:
-            await bot.send_message(chat_id=ALERT_CHAT_ID, text=message, parse_mode='HTML')
+            await bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message, parse_mode='HTML')
         print("Successfully sent consolidated keyword alert.")
     except Exception as e:
         print(f"Failed to send instant alert: {e}")
