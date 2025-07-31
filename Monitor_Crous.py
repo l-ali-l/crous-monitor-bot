@@ -16,7 +16,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 # Add the keywords you want to search for (in lowercase)
-ALERT_KEYWORDS = ["marseille", "luminy", "madagascar", "grenoble", "nimes"]
+ALERT_KEYWORDS = ["marseille", "luminy", "madagascar", "grenoble", "nimes", "montbeliard"]
 
 async def send_instant_alert(message):
     """Sends the consolidated alert message to the bot."""
